@@ -91,9 +91,6 @@ class DirectLineClient:
         if not self.secret:
             return None
 
-        if self.conversation_id:
-            return self.conversation_id
-
         try:
             resp = requests.post(
                 f"{self.endpoint}/conversations",
@@ -225,13 +222,15 @@ class DirectLineClient:
         if not self.secret:
             logging.error("Direct Line secret not set. call_llm cannot run.")
             return "Direct Line secret not set. call_llm cannot run."
+        
+        if self.conversation_id is None: 
+            self.start_conversation()
 
-        conversation_id = self.start_conversation()
-        if conversation_id is None:
+        if self.conversation_id is None:
             logging.error("DirectLine: failed to start conversation.")
             return "DirectLine: failed to start conversation."
 
-        if not self.send_message(conversation_id, prompt):
+        if not self.send_message(self.conversation_id, prompt):
             logging.error("DirectLine: failed to send prompt.")
             return "DirectLine: failed to send prompt."
 
@@ -240,7 +239,7 @@ class DirectLineClient:
         current_wm = self.watermark or "0"
 
         while time.time() - start_time < timeout:
-            msgs, new_wm = self.poll_responses(conversation_id, current_wm)
+            msgs, new_wm = self.poll_responses(self.conversation_id, current_wm)
 
             if msgs:
                 collected.extend(msgs)
