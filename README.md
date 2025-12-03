@@ -196,7 +196,7 @@ Automatically starts a conversation if needed, sends the prompt, polls until a r
 
 -   **Open Copilot Studio** and select the agent you want to work with.
     
--   Go to the **Security** section, choose **Authentication**, and click **Authenticate with Microsoft**.
+-   Go to the **Security** section, choose **Authentication**, and click **Without Authentication**.
     
 -   Return to the **Security** section and open **Web Channel Security**. Copy one of the available secret keys.
     
